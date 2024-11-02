@@ -84,7 +84,7 @@ echo "3) Deploy both ERC20 Token and NFT"
 read -p "Enter your choice (1, 2, or 3): " CHOICE
 
 deploy_erc20() {
-  mkdir -p winsnip
+  mkdir -p win
   cat <<EOF > foundry.toml
 [rpc_endpoints]
 abstract = "https://api.testnet.abs.xyz/"
@@ -103,7 +103,7 @@ EOF
   read -p "Your private key: " YOUR_PRIVATE_KEY
 
   show "Creating ERC20 contract file..." "progress"
-  cat <<EOF > winsnip/$CONTRACT_NAME.sol
+  cat <<EOF > win/$CONTRACT_NAME.sol
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
@@ -141,7 +141,7 @@ contract $CONTRACT_NAME is ERC20, ERC20Burnable, ERC20Pausable, Ownable, ERC20Pe
 EOF
 
   show "Deploying ERC20 contract..." "progress"
-  DEPLOY_CMD="forge create winsnip/$CONTRACT_NAME.sol:$CONTRACT_NAME --constructor-args $YOUR_ADDRESS --rpc-url https://api.testnet.abs.xyz --private-key $YOUR_PRIVATE_KEY"
+  DEPLOY_CMD="forge create win/$CONTRACT_NAME.sol:$CONTRACT_NAME --constructor-args $YOUR_ADDRESS --rpc-url https://api.testnet.abs.xyz --private-key $YOUR_PRIVATE_KEY"
   eval $DEPLOY_CMD
 
   read -p "Deployed ERC20 contract address: " CONTRACT_ADDRESS
@@ -179,7 +179,7 @@ EOF
 }
 
 deploy_nft() {
-  mkdir -p winsnip
+  mkdir -p win
   read -p "Enter the name of the NFT: " NFT_NAME
   read -p "Enter the symbol of the NFT: " NFT_SYMBOL
   read -p "Enter your private key: " YOUR_PRIVATE_KEY  
@@ -195,7 +195,7 @@ deploy_nft() {
 abstract = "https://api.testnet.abs.xyz"
 EOF
 
-  cat <<EOF > winsnip/MyNFT.sol
+  cat <<EOF > win/MyNFT.sol
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
@@ -219,7 +219,7 @@ contract MyNFT is ERC721URIStorage, Ownable {
 EOF
 
   show "Deploying NFT contract..." "progress"
-  DEPLOY_CMD="forge create winsnip/MyNFT.sol:MyNFT --rpc-url https://api.testnet.abs.xyz --private-key $YOUR_PRIVATE_KEY --constructor-args $OWNER_ADDRESS"
+  DEPLOY_CMD="forge create win/MyNFT.sol:MyNFT --rpc-url https://api.testnet.abs.xyz --private-key $YOUR_PRIVATE_KEY --constructor-args $OWNER_ADDRESS"
   eval $DEPLOY_CMD
 
   read -p "Enter deployed NFT contract address: " NFT_CONTRACT_ADDRESS
